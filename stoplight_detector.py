@@ -8,10 +8,12 @@ import os
 def beep():
     if sys.platform.startswith("win"):
         import winsound
-        winsound.Beep(1000, 200)  # 1000Hz, 200ms
+        winsound.Beep(1000, 600)  # longer beep
     else:
-        # Pi/Linux: play beep.wav in the same directory
+        # Set main volume to 100% before beep
+        os.system("amixer set Master 100% > /dev/null")
         os.system("aplay -q beep.wav")
+
 
 # --- CAMERA SETUP ---
 CAMERA_INDEX = 0  # your camera
@@ -20,7 +22,12 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
 
 cv2.namedWindow("Camera", cv2.WINDOW_NORMAL)
-cv2.resizeWindow("Camera", 640, 480)
+cv2.setWindowProperty(
+    "Camera",
+    cv2.WND_PROP_FULLSCREEN,
+    cv2.WINDOW_FULLSCREEN
+)
+
 
 print("Camera started. Press ESC or Ctrl+C to exit.")
 
